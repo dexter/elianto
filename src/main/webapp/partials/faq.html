@@ -1,0 +1,29 @@
+<div class="row">
+	<script type="text/javascript">
+		
+	</script>
+	<div class="col-xs-12">
+		<h1>FAQ</h1>
+		<p>
+			Here we will write some rules the user should follow in the annotation process...
+		</p>
+		<div class="panel-group" id="accordion">
+			
+			<div class="panel panel-default" ng-repeat="faq in faqs">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" data-target="#collapse{{$index+1}}" href="">
+							{{$index+1}}. {{faq.title}}
+						</a>
+					</h4>
+				</div>
+				<div id="collapse{{$index+1}}" class="panel-collapse collapse">
+					<div class="panel-body">
+						{{faq.content}}
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>

@@ -1,0 +1,227 @@
+<div class="row">
+	<div class="col-xs-6 col-personalized">
+		<h1>Entity Linking <small>Step 1 of 2</small></h1>
+	</div>
+	<div class="col-xs-6 col-personalized">
+		<div class="progress progress-striped active progress-personalized" ng-show="percentageOfWorkDone > 0">
+			<div class="progress-bar" role="progressbar" aria-valuenow="{{percentageOfWorkDone}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': percentageOfWorkDone + '%'}" ng-class="{'progress-bar-success': percentageOfWorkDone === 100, 'progress-bar-danger': percentageOfWorkDone < 100}">
+				<span>{{percentageOfWorkDone}}% Complete</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-6 col-personalized" id="document-section">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-xs-6">
+						<h3 class="panel-title">Document</h3>
+					</div>
+					<div class="col-xs-6" >
+						<div class="checkbox pull-right">
+							<label title="Show also deleted spots">
+								<input type="checkbox" ng-model="showAllSpots" id="checkboxShowAll">
+								<span class="glyphicon" ng-class="{'glyphicon-eye-open': showAllSpots, 'glyphicon-eye-close': !showAllSpots}"></span> Show all Spots
+							</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body" id="document-template" document-template template="{{document.template}}"></div>
+			<div class="panel-footer text-right">
+				<button class="btn btn-danger" type="button" ng-click="deleteAllUnannotatedSpot();" ng-hide="selectedSpot || percentageOfWorkDone >= 100">
+					<span class="glyphicon glyphicon-trash"></span> Delete all Unannotated Spot
+				</button>
+				<button class="btn btn-danger" type="button" ng-click="deleteSpot(selectedSpot);" ng-hide="!selectedSpot || spots[selectedSpot].deleted">
+					<span class="glyphicon glyphicon-trash"></span> Delete Selected Spot
+				</button>
+				<button class="btn btn-primary" type="button" ng-click="addSpotFromSelectedText()" ng-hide="!isTextSelected">
+					<span class="glyphicon glyphicon-plus-sign"></span> Create Spot from Selected Text
+				</button>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Personal Notes</h3>
+			</div>
+			<div class="panel-body">
+				<textarea class="form-control" ng-model="notes" rows="5" name="notes" placeholder="Enter your notes to the annotation process..."></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-6 col-personalized" id="document-entities">
+		<div class="panel panel-default" ng-show="selectedSpot">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Entities suggested for the selected mention
+					<span>
+						<em>{{spots[selectedSpot].mention}}</em>
+						<a href="https://www.google.com/search?q=site:en.wikipedia.org/wiki/+{{spots[selectedSpot].mention | encodeUrl}}" target="_blank">
+							<img src="images/g.png" height="20" alt="search on google">
+						</a>
+					</span>
+				</h3>
+			</div>
+			<table class="table table-hover">
+				<!--<thead>-->
+					<!--<tr>-->
+						<!--<th>Image</th>-->
+						<!--<th>Entity</th>-->
+					<!--</tr>-->
+				<!--</thead>-->
+				<tbody>
+					<tr ng-repeat="entity in entities | selectedSpotFilter:spots:selectedSpot" ng-click="changeSelectedEntity(selectedSpot, entity.id)" ng-class="{success: spots[selectedSpot].entities.selected === entity.id}">
+						<td class="cell-thumbnail hidden-xs">
+							<img img-load ng-src="{{entity.image | thumbnail:200}}" title="{{entity.title}}" class="img-thumbnail fade" />
+						</td>
+						<td class="candidate-cell">
+							<h3>
+								<a ng-href="{{entity.url}}" target="_blank" title="Open entity's page on wikipedia">{{entity.title}}
+									<img src="images/wikipedia.png" width="24" height="24">
+								</a>
+							</h3>
+							<span>{{entity.description | truncate:256}}</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="panel-footer text-right">
+				<form name="addEntityForm" class="form-inline" role="form" novalidate ng-hide="!selectedSpot">
+					<div class="form-group has-feedback" ng-class="{'has-error': addEntityForm.addEntityUrl.$invalid && !addEntityForm.addEntityUrl.$pristine, 'has-success': addEntityForm.addEntityUrl.$valid}">
+						<label class="control-label" for="addEntityUrl" ng-show="addEntityForm.addEntityUrl.$invalid && !addEntityForm.addEntityUrl.$pristine && addEntityForm.addEntityUrl.$error.required">The URL is required</label>
+						<label class="control-label" for="addEntityUrl" ng-show="addEntityForm.addEntityUrl.$invalid && !addEntityForm.addEntityUrl.$pristine && addEntityForm.addEntityUrl.$error.pattern">The Wikipedia URL is not valid</label>
+						<label class="control-label" for="addEntityUrl" ng-show="addEntityForm.addEntityUrl.$invalid && !addEntityForm.addEntityUrl.$pristine && addEntityForm.addEntityUrl.$error.apiError">Error with the APIs</label>
+						<input class="form-control" name="addEntityUrl" id="addEntityUrl" placeholder="Enter Wikipedia URL..."
+							   ng-model="addEntityUrl" ng-pattern="/^(http:\/\/)?(en.)?wikipedia.org/wiki/.*$/" required
+							   ng-change="addEntityForm.addEntityUrl.$setValidity('apiError', true);" ng-disabled="spots[selectedSpot].deleted">
+						<span class="glyphicon form-control-feedback" ng-class="{'glyphicon-remove': addEntityForm.addEntityUrl.$invalid && !addEntityForm.addEntityUrl.$pristine, 'glyphicon-ok': addEntityForm.addEntityUrl.$valid}"></span>
+					</div>
+					<div class="form-group">
+						<button class="btn btn-primary" type="button" ng-click="addEntity(addEntityUrl)" ng-disabled="addEntityForm.$invalid">
+							<span class="glyphicon glyphicon-plus-sign"></span> Add Entity
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row alert" ng-class="{'alert-success': percentageOfWorkDone === 100, 'alert-danger': percentageOfWorkDone < 100}">
+	<div class="text-right">
+		<button class="btn btn-danger" ng-click="skipDocument()" ng-disabled="percentageOfWorkDone > 0" ng-hide="disableSaving">
+			<span class="glyphicon glyphicon-exclamation-sign"></span> Skip Bad Document!
+		</button>
+		<button class="btn btn-primary" ng-click="saveUserAnnotations(true)" ng-disabled="percentageOfWorkDone == 0" ng-hide="disableSaving">
+			<span class="glyphicon glyphicon-save"></span> Save Annotations!
+		</button>
+		<button class="btn btn-success" ng-click="moveToNextStep(0)" ng-show="documentIsAnnotated && !disableNextLink">
+			<span class="glyphicon glyphicon-step-forward"></span> Move to next step!
+		</button>
+	</div>
+</div>
+
+<div id="context-menu">
+	<ul class="dropdown-menu" role="menu">
+		<li role="presentation" class="dropdown-header">
+			Spot Section
+		</li>
+		<li role="presentation" ng-hide="!isTextSelected || (underlyingSpot && !spots[underlyingSpot].deleted)">
+			<a role="menuitem" tabindex="-1" href="" ng-click="addSpotFromSelectedText()">
+				Create Spot
+			</a>
+		</li>
+		<li role="presentation" ng-hide="!underlyingSpot || spots[underlyingSpot].deleted || selectedSpot == underlyingSpot">
+			<a role="menuitem" tabindex="-1" ng-click="changeSelectedSpot(underlyingSpot)" href="">
+				Select Spot
+			</a>
+		</li>
+		<li role="presentation" ng-hide="!underlyingSpot || spots[underlyingSpot].deleted">
+			<a role="menuitem" tabindex="-1" ng-click="deleteSpot(underlyingSpot)" href="">
+				Delete Spot
+			</a>
+		</li>
+		<li role="presentation" class="divider"></li>
+		<li role="presentation" class="dropdown-header">
+			Mention Section
+		</li>
+		<li role="presentation" ng-hide="!isTextSelected || (underlyingSpot && !spots[underlyingSpot].deleted)">
+			<a role="menuitem" tabindex="-1" ng-click="searchMention()" href="">
+				Search mention
+			</a>
+		</li>
+		<li role="presentation" ng-hide="!underlyingSpot || spots[underlyingSpot].deleted || !spots[underlyingSpot].entities.selected">
+			<a role="menuitem" tabindex="-1" ng-click="applyToSimilarMentions(underlyingSpot)" href="">
+				Apply to similar mentions
+			</a>
+		</li>
+	</ul>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="savingModalLabel" aria-hidden="true" id="savingModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="savingModalLabel">
+					<span ng-hide="savingFailed">Saving Done</span>
+					<span ng-show="savingFailed">Saving NOT Done</span>
+				</h4>
+			</div>
+			<div class="modal-body">
+				<div ng-show="savingFailed">
+					<div class="alert alert-danger fade in" ng-repeat="error in savingErrors">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+						{{error}}
+					</div>
+					Saving error, please try again. <br/>
+					If this error persists, please contact the site administrator.
+				</div>
+				<div ng-hide="savingFailed || skippedDocument">
+					User Annotation correctly saved.
+				</div>
+				<div ng-show="!savingFailed && skippedDocument">
+					Document correctly saved as to skip.
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					Stay on this page
+				</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="savingFailed" ng-click="saveUserAnnotations(false)">
+					Retry to save annotations
+				</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide="savingFailed || skippedDocument || disableNextLink" ng-click="moveToNextStep(500)">
+					Move to next step
+				</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="(!savingFailed && skippedDocument) || disableNextLink" ng-click="moveToNextDocument()">
+					Move to next document
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="checkSavingModalLabel" aria-hidden="true" id="checkModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="checkSavingModalLabel">Confirmation</h4>
+			</div>
+			<div class="modal-body">
+				<span>
+					Are you sure you want to save the current annotated spots only ? <br/>
+					All the other spots (the red ones) will be deleted. <br/>
+					Please confirm below your action!
+				</span>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					Continue with the Annotation Process
+				</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="saveUserAnnotations(false)">
+					Delete Unannotated Spots and Save
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,106 @@
+<h1>Dashboard</h1>
+<p>
+	Here we propose you two kind of information that can be useful to you. On the left panel you can see all the
+	documents the system proposed you to annotate, with additional information about the annotation status. You
+	can also click on each document to see how you annotate that document and to modify its annotation. On the
+	right panel, on the other hand, some aggregated statistics about the annotation of the collection are showed you.
+</p>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="col-sm-8 no-padding col-personalized annotation-panel">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Annotated Document</h3>
+				</div>
+				<table ng-table="tableParamsAnnotations" show-filter="true" class="table table-hover">
+					<tr ng-repeat="annotation in $data">
+						<td data-title="'DocId'" sortable="'doc.docId'" filter="{'doc.docId': 'text'}">
+							{{annotation.doc.docId}}
+						</td>
+						<td data-title="'User'" sortable="'userName'" filter="{'uniqueUserName': 'select'}" filter-data="uniques($column, 'userAnnotations')">
+							{{annotation.uniqueUserName}}
+						</td>
+						<td data-title="'status'" sortable="'status'" filter="{'status': 'select'}" filter-data="uniques($column, 'userAnnotations')">
+							{{annotation.status}}
+						</td>
+						<td data-title="'Date'" sortable="'timestamp'">
+							{{annotation.timestamp | date:'dd MMM yyyy - HH:mm:ss'}}
+						</td>
+						<td data-title="'Link'">
+							<a ng-href="#/{{annotation.stepLink}}/userId/{{annotation.user.uid}}/docId/{{annotation.doc.docId}}" class="btn btn-sm btn-success" title="Open the annotated document">
+								<span class="glyphicon glyphicon-new-window"></span> Open
+							</a>
+						</td>
+					</tr>
+				</table>
+				<div class="panel-footer text-right">
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-4 no-padding col-personalized annotation-panel">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Collection Status</h3>
+				</div>
+				<table ng-table="tableParamsCollection" show-filter="true" class="table table-hover">
+					<tr ng-repeat="entryStat in $data">
+						<td data-title="'DocId'" sortable="'docId'" filter="{'docId': 'text'}">
+							{{entryStat.docId}}
+						</td>
+						<td data-title="'Freq'" sortable="'freq'" filter="{'freq': 'text'}">
+							{{entryStat.freq}}
+						</td>
+						<td data-title="'Avg Spots / Docs'" sortable="'avgSpots'">
+							{{entryStat.avgSpots | number:2}}
+						</td>
+					</tr>
+				</table>
+				<div class="panel-footer text-right">
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12">
+		<div class="col-xs-12 no-padding annotation-panel">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">Leader Board - Ranked for Annotated Spots</h3>
+				</div>
+				<table ng-table="tableParamsLeaderBoard" show-filter="true" class="table table-hover">
+					<tr ng-repeat="userStats in $data">
+						<td data-title="'Rank'" sortable="'rank'" filter="{'rank': 'text'}">
+							{{userStats.rank}}
+						</td>
+						<td data-title="'User'" sortable="'userName'" filter="{'uniqueUserName': 'select'}" filter-data="uniques($column, 'leaderBoard')">
+							{{userStats.uniqueUserName}}
+						</td>
+						<td data-title="'# Spots'" sortable="'numSpots'">
+							{{userStats.numSpots}}
+						</td>
+						<td data-title="'# Docs'" sortable="'numDocs'">
+							{{userStats.numDocs}}
+						</td>
+						<td data-title="'Avg Spots/Docs'" sortable="'avgSpotsPerDocs'">
+							{{userStats.avgSpotsPerDocs | number:2}}
+						</td>
+					</tr>
+					<tr class="summary info">
+						<td></td>
+						<td>All Users</td>
+						<td>{{annotationStats.numSpots}}</td>
+						<td>{{annotationStats.numDocs}}</td>
+						<td>{{annotationStats.numSpots / annotationStats.numDocs | number:2}}</td>
+					</tr>
+				</table>
+				<div class="panel-footer text-right">
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>

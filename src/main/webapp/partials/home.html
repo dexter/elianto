@@ -1,0 +1,76 @@
+<div class="navigation-steps">
+	<div id="prev" class="navbtn" ng-show="showPrev()">
+		<div class="text-center" ng-mouseover="over('prev')" ng-mouseout="out('prev')" ng-click="prev()">Prev</div>
+	</div>
+	<div id="next" class="navbtn" ng-show="showNext()">
+		<div class="text-center" ng-mouseover="over('next')" ng-mouseout="out('next')" ng-click="next()">Next</div>
+	</div>
+</div>
+
+<div class="steps text-center">
+	<div id="step_1" class="box selected">
+		<h1>Welcome to the Dexter Entity Linking Annotator</h1>
+
+		<p>
+			Entity Linking allows to automatically detect <strong>entities</strong> in documents.
+		</p><br/>
+
+		<p>
+			We are asking your help in generating a human annotated dataset.
+		</p>
+	</div>
+	<div id="step_2" class="box">
+		<h1>What is an Entity?</h1>
+
+		<p>An entity could be a person, a place, an event or a material thing. They are things of interest to
+			users of the web who are either searching for information (e.g., is there a good Italian restaurant in
+			San Francisco?).</p>
+		<img class="center-block" alt="entity" src="images/entity.png"/>
+	</div>
+	<div id="step_3" class="box">
+		<p>Usually people refer to an entity using one of its names: we call these mentions <strong> spots </strong>.
+			Do you know
+			that there are more than 50 different spots that people use to refer to the
+			<a target="_parent" href="http://en.wikipedia.org/wiki/University_of_California,_Berkeley"> Berkley
+				University</a>
+			? ( u.c. berkley, cal berkley, berkley university, ucb, university of
+			california...).</p>
+	</div>
+	<div id="step_4" class="box">
+		<p>
+			Unfortunately words have a million different meanings, and spots too. If someone says "<em>I love
+			boston</em>", she
+			probably means the <a href="http://en.wikipedia.org/wiki/Boston" target="_blank">big city in
+			Massachusetts</a>, but she could be also
+			referring to one of the 26 other bostons around the world, or to the
+			<a href="http://en.wikipedia.org/wiki/Boston_%28band%29" target="_blank">boston band</a>.
+		</p>
+
+		<div class="image-with-label-inside">
+			<img class="center-block" width=400 alt="Boston Band" src="images/Boston_1977.JPG"/>
+
+			<h2>The Boston Band</h2>
+		</div>
+	</div>
+	<div id="step_5" class="box">
+		<h1> How can you help us? </h1>
+
+		<p>
+			We are trying to create a collection of documents manually annotated with spots and correct entities, to
+			evaluate and improve how our automatic approaches are good to annotate a document. We ask you to
+			contribute to the collection <strong>annotating just a few documents</strong>.
+			Your contribution will help the research on search engines and information retrieval. Let's provide
+			people with better access to the Internet knowledge!
+		</p>
+	</div>
+	<div id="step_6" class="box">
+		<h1> How does it work?</h1>
+
+		<p>
+			Have a look at our <a href="index.html#/guidelines">
+			annotation guidelines</a> and to the <a href="#/faq" target="_black">FAQ page</a>.
+			Then perform the login (using google/facebook, we will keep only your mail) and contribute to our
+			project annotating some documents! <strong>Thank you</strong>!
+		</p>
+	</div>
+</div>

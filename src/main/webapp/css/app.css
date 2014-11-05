@@ -1,0 +1,295 @@
+/* app css stylesheet */
+
+@media (max-width: 992px) {
+    /* Need to patch the padding because with h. resolution between 768 and 992 the navbar splits into two lines */
+    .nav:first-child > li > a {
+        padding-right: 7px;
+        padding-left: 7px;
+    }
+}
+
+body {
+    padding-top: 70px;
+}
+
+h1 {
+    margin-top: 0px;
+}
+
+.dropdown-menu form {
+    padding: 0px 10px;
+}
+
+.dropdown-menu .form-group {
+    margin-bottom: 5px;
+}
+
+.table > tbody > tr > td {
+    vertical-align: middle;
+}
+
+#document-section .checkbox {
+    margin: 0px;
+}
+
+#document-section .checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.no-padding {
+    padding: 0;
+    margin: 0;
+}
+
+.col-personalized:first-child {
+    padding-right: 10px;
+}
+
+.col-personalized:last-child {
+    padding-left: 10px;
+}
+
+.progress-personalized {
+    margin: 15px 0px 0px 0px;
+}
+
+.progress-personalized > div {
+    min-width: 25px;
+}
+
+.cell-thumbnail {
+    width: 33%;
+    height: 200px;
+    text-align: center;
+}
+
+.cell-thumbnail img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.candidate-cell > h3 {
+    margin-top: 0px;
+}
+
+.candidate-cell img {
+    vertical-align: top;
+}
+
+.relevance-cell {
+    width: 100px;
+}
+
+.table > tbody > tr.entity-row > td {
+    padding: 4px;
+    vertical-align: middle;
+}
+
+.table > tbody > tr.entity-row > td h3 {
+    margin: 0px;
+}
+
+.panel-body {
+    position: relative;
+}
+
+.relevance-panel .label {
+    font-size: 14px;
+    line-height: 2;
+}
+
+.relevance-panel .badge {
+    background-color: black;
+}
+
+.relevance-box {
+    width: 265px;
+}
+
+.popover {
+    max-width: 500px;
+    width: auto;
+}
+
+.popover .table {
+    margin: 0px;
+}
+
+.popover .table > tbody > tr > td {
+    border: none;
+}
+
+.rating {
+    font-size: 24px;
+    /* different browsers use different names */
+    cursor: pointer;
+}
+
+.rating i:first-child {
+    color: #d9534f;
+}
+
+.rating i {
+    padding-right: 4px;
+}
+
+#document-template .title {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+#document-template > .dateline {
+    font-size: 11px;
+    letter-spacing: +1px;
+    color: #555;
+    border-bottom: 1px solid #CCC;
+    margin-bottom: 8px;
+    padding-bottom: 2px;
+}
+
+#document-template > .body > .body_par {
+    border-right: 2px dotted red;
+    padding-right: 3px;
+}
+
+#document-template > .body > .body_par:last-child {
+    border-right: none;
+    padding-right: 0px;
+}
+
+.spotSelected {
+    background-color: #ffe600;
+    color: black;
+}
+
+.spotDone {
+    background-color: #c1e2b3;
+    color: black;
+}
+
+.spotTodo {
+    background-color: #e4b9b9;
+    color: black;
+}
+
+#overlay {
+    position: fixed;
+    left: 0;
+    top: 0;
+    /*bottom: 0;*/
+    /*right: 0;*/
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    /*-moz-opacity: 0.5;    *//* Mozilla extension */
+    /*-khtml-opacity: 0.5;  *//* Safari/Conqueror extension */
+    /*opacity: 0.5; *//* CSS3 */
+    /*filter: alpha(opacity=50);*/
+    z-index: 2000;
+}
+
+#overlay.fade {
+    -webkit-transition: opacity 0.5s ease;
+    -moz-transition: opacity 0.5s ease;
+    -o-transition: opacity 0.5s ease;
+    -ms-transition: opacity 0.5s ease;
+    transition: visibility 0s 0.5s, opacity 0.5s ease;
+    visibility: hidden;
+}
+
+#overlay.fade.in {
+    -moz-opacity: 0.6; /* Mozilla extension */
+    -khtml-opacity: 0.6; /* Safari/Conqueror extension */
+    opacity: 0.6; /* CSS3 */
+    filter: alpha(opacity=60);
+    transition: opacity 0.6s ease;
+    visibility: visible;
+}
+
+#overlay > #loading-bar {
+    width: 50px;
+    height: 57px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin: -28px 0 0 -25px;
+}
+
+.annotation-panel input[type="text"] {
+    max-width: 70px;
+}
+
+.annotation-panel .summary {
+    font-weight: bold;
+}
+
+.steps {
+    position: absolute;
+    left:0;
+    right:0;
+    top: 0px;
+    bottom: 0px;
+    margin-left: 90px;
+    margin-right: 90px;
+    height: 100%;
+    margin-top: 70px;
+}
+
+/* css step presentation */
+.steps .box {
+    position: absolute;
+    font-size: 25px;
+    min-height: 100px;
+    width: 1000px;
+    top: 0px;
+    left: 200%;
+    right: 0px;
+    margin: auto;
+    /*display: none;*/
+}
+
+.steps .box.selected {
+    display: block;
+}
+
+.steps .box:first-child {
+    left: 0%;
+}
+
+.navigation-steps .navbtn {
+    position: fixed;
+    width: 90px;
+    height: 90px;
+    line-height: 90px;
+    font-size: 24px;
+    cursor: pointer;
+    background: #75cee8;
+    color: white;
+    overflow: auto;
+    margin: auto;
+    top: 45px;
+    bottom: 0;
+    z-index: 100;
+}
+
+.navigation-steps #next {
+    right: 0;
+}
+
+.navigation-steps #prev {
+    left: 0;
+}
+
+.image-with-label-inside {
+    position: relative;
+    width: 100%; /* for IE 6 */
+}
+
+.image-with-label-inside h2 {
+    color: white;
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+}

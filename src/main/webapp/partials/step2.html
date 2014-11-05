@@ -1,0 +1,141 @@
+<div class="row">
+	<div class="col-xs-6 col-personalized">
+		<h1>Entity Linking <small>Step 2 of 2</small></h1>
+	</div>
+	<div class="col-xs-6 col-personalized">
+		<div class="progress progress-striped active progress-personalized" ng-show="percentageOfWorkDone > 0">
+			<div class="progress-bar" role="progressbar" aria-valuenow="{{percentageOfWorkDone}}" aria-valuemin="0" aria-valuemax="100" ng-style="{'width': percentageOfWorkDone + '%'}" ng-class="{'progress-bar-success': percentageOfWorkDone === 100, 'progress-bar-danger': percentageOfWorkDone < 100}">
+				<span>{{percentageOfWorkDone}}% Complete</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-6 col-personalized">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Document</h3>
+			</div>
+			<div class="panel-body" id="document-template" document-template template="{{document.template}}"></div>
+			<div class="panel-footer text-right"></div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Personal Notes</h3>
+			</div>
+			<div class="panel-body">
+				<textarea class="form-control" ng-model="notes" rows="5" name="notes" placeholder="Enter your notes to the annotation process..."></textarea>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-6 col-personalized relevance-panel">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title clearfix">
+					<span>Relevant Entities for the Document</span>
+					<button type="button" class="btn btn-xs btn-primary pull-right" ng-click="orderEntitiesByRelevance()">
+						<span class="glyphicon glyphicon-sort-by-attributes-alt"></span> Order by Relevance
+					</button>
+				</h3>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-hover" popover-config>
+					<!--<thead>-->
+						<!--<tr>-->
+							<!--<th>Entity</th>-->
+							<!--<th>Relevance</th>-->
+						<!--</tr>-->
+					<!--</thead>-->
+					<tbody>
+					<!--tr ng-repeat="entity in entities | annotatedEntityFilter:spots | selectedEntityFilter:spots:selectedSpot | orderBy:'score':true" class="entity-row" on-repeat-finished-->
+					<tr ng-repeat="entity in entities | annotatedEntityFilter:spots | selectedEntityFilter:spots:selectedSpot | orderBy:lastOrderingFunction:true" class="entity-row" on-repeat-finished>
+						<td>
+							<div class="popover-markup">
+								<a ng-href="{{entity.url}}" target="_blank" class="trigger">
+									<h3>{{entity.title}}</h3>
+								</a>
+								<div class="title hide">
+									{{entity.title}}
+								</div>
+								<div class="content hide">
+									<table class="table">
+										<td class="cell-thumbnail">
+											<img img-load ng-src="{{entity.image  | thumbnail}}" title="{{entity.title}}" class="img-thumbnail fade"/>
+										</td>
+										<td class="candidate-cell">
+											<h3>{{entity.title}}</h3>
+											<span>{{entity.description | truncate:256}}</span>
+										</td>
+									</table>
+								</div>
+							</div>
+						</td>
+						<td class="relevance-box" ng-init="relevance.value=entities[entity.id].score; starting_value=entities[entity.id].score+1">
+							<rating class="rating" value="starting_value" max="4" ng-click="entities[entity.id].score=relevance.value"
+									on-hover="relevance.value=value-1" on-leave="relevance.value=entities[entity.id].score"
+									rating-states="[{stateOn: 'glyphicon-ban-circle', stateOff: 'glyphicon-ok-circle'},
+													{stateOn: 'glyphicon-star', stateOff: 'glyphicon-star-empty'},
+													{stateOn: 'glyphicon-star', stateOff: 'glyphicon-star-empty'},
+													{stateOn: 'glyphicon-star', stateOff: 'glyphicon-star-empty'} ];">
+							</rating>
+							<span class="label" ng-class="{	'label-danger': 	relevance.value==0,
+															'label-warning': 	relevance.value==1,
+															'label-info': 		relevance.value==2,
+															'label-success': 	relevance.value==3}">
+							{{relevanceDesc[relevance.value]}}
+							</span>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="panel-footer text-right">
+				<span class="label label-success"><span class="badge">{{scoreDistribution[3]}}</span> {{relevanceDesc[3]}}</span>
+				<span class="label label-info"><span class="badge">{{scoreDistribution[2]}}</span> {{relevanceDesc[2]}}</span>
+				<span class="label label-warning"><span class="badge">{{scoreDistribution[1]}}</span> {{relevanceDesc[1]}}</span>
+				<span class="label label-danger"><span class="badge">{{scoreDistribution[0]}}</span> {{relevanceDesc[0]}}</span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row alert alert-success">
+	<div class="text-right">
+		<button class="btn btn-primary" ng-click="saveEntitiesRelevance()" ng-hide="disableSaving">
+			<span class="glyphicon glyphicon-save"></span> Save entities relevance!
+		</button>
+		<button class="btn btn-success pull-left" ng-click="moveToPrevStep()" ng-hide="disablePrevLink">
+			<span class="glyphicon glyphicon-step-backward"></span> Move to prev step!
+		</button>
+	</div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="savingModalLabel" aria-hidden="true" id="savingModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="savingModalLabel">
+					<span ng-hide="savingFailed">Saving Done</span>
+					<span ng-show="savingFailed">Saving NOT Done</span>
+				</h4>
+			</div>
+			<div class="modal-body">
+				<div ng-show="savingFailed">
+					<div class="alert alert-danger fade in" ng-repeat="error in savingErrors">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+						{{error}}
+					</div>
+					Saving error, please try again. <br/>
+					If this error persists, please contact the site administrator.
+				</div>
+				<div ng-hide="savingFailed">
+					Relevance of entities correctly saved.
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Stay on this page</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" ng-show="savingFailed" ng-click="saveEntitiesRelevance()">Retry to save relevance</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" ng-hide="savingFailed" ng-click="moveToNextDocument()">Move to next document</button>
+			</div>
+		</div>
+	</div>
+</div>

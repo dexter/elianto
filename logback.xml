@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user -->
+<!-- -->
+<!-- For professional support please see -->
+<!-- http://www.qos.ch/shop/products/professionalSupport -->
+<!-- -->
+<configuration>
+	<appender name="STDOUT" class="org.apache.juli.logging.ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date %-4r [%t] %-5p %c - %m%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="LOGFILE" class="org.apache.juli.logging.ch.qos.logback.core.FileAppender">
+		<file>${catalina.base}/logs/dexter-annotate.log</file>
+		<encoder>
+			<pattern>%date %-4r [%t] %-5p %c - %m%n</pattern>
+			<!-- <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern> -->
+		</encoder>
+	</appender>
+
+	<logger name="org.springframework" level="INFO" />
+
+	<logger name="it.cnr.isti.hpc.dexter.annotate" level="TRACE" level="ERROR">
+		<appender-ref ref="LOGFILE" />
+	</logger>
+	
+	<root level="${log:-INFO}">
+		<appender-ref ref="STDOUT" />
+		<logger name="it.cnr.isti.hpc.property.ProjectProperties" level="ERROR" />
+		<logger name="com.j256.ormlite.stmt.StatementExecutor" level="ERROR" />
+		<logger name="com.j256.ormlite.stmt.mapped.BaseMappedStatement" level="ERROR" />
+		<logger name="com.j256.ormlite.stmt.mapped.BaseMappedStatement" level="ERROR" />
+
+	</root>
+
+</configuration>
