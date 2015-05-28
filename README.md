@@ -66,3 +66,35 @@ In the project root there is a `project.properties` file which contains all the 
 * change the EL system used for the spotting (you need to adapt also the code that interact with the server if you change this parameter)
 * the bucket size and the document agreement: the documents are partitioned in buckets to avoid that the annotation are spread among a lot of documents with a low overlap on each one (the same document usually need to be annotated by more than one persons). Before moving to a new bucket (the system automatically manage the operation) the framework checks that are at least X annotation per document (where X is the agreement).
 * annotation tasks: csv with the steps to perform (step1, step2 or both)
+
+## Citations
+
+If you use the Elianto framework, you must cite:
+
+> Trani, S., Ceccarelli, D., Lucchese, C., Orlando, S., & Perego, R. 
+> **Manual Annotation of Semi-Structured Documents for Entity-Linking**. 
+> *In Proceedings of the 23rd ACM International Conference on Conference 
+> on Information and Knowledge Management (pp. 2075-2077). DOI: [http://doi.acm.org/10.1145/2661829.2661854]*
+
+
+Bibtex format:
+
+	@inproceedings{DBLP:conf/cikm/TraniCLOP14,
+	  author    = {Salvatore Trani and
+	               Diego Ceccarelli and
+	               Claudio Lucchese and
+	               Salvatore Orlando and
+	               Raffaele Perego},
+	  title     = {Manual Annotation of Semi-Structured Documents for Entity-Linking},
+	  booktitle = {Proceedings of the 23rd {ACM} International Conference on Conference
+	               on Information and Knowledge Management, {CIKM} 2014, Shanghai, China,
+	               November 3-7, 2014},
+	  pages     = {2075--2077},
+	  year      = {2014},
+	  crossref  = {DBLP:conf/cikm/2014},
+	  url       = {http://doi.acm.org/10.1145/2661829.2661854},
+	  doi       = {10.1145/2661829.2661854},
+	  timestamp = {Fri, 07 Nov 2014 12:38:01 +0100},
+	  biburl    = {http://dblp.uni-trier.de/rec/bib/conf/cikm/TraniCLOP14},
+	  bibsource = {dblp computer science bibliography, http://dblp.org}
+	}
