@@ -67,14 +67,14 @@ In the project root there is a `project.properties` file which contains all the 
 * the bucket size and the document agreement: the documents are partitioned in buckets to avoid that the annotation are spread among a lot of documents with a low overlap on each one (the same document usually need to be annotated by more than one persons). Before moving to a new bucket (the system automatically manage the operation) the framework checks that are at least X annotation per document (where X is the agreement).
 * annotation tasks: csv with the steps to perform (step1, step2 or both)
 
-## Citations
+## Citation
 
 If you use the Elianto framework, you must cite:
 
 > Trani, S., Ceccarelli, D., Lucchese, C., Orlando, S., & Perego, R. 
 > **Manual Annotation of Semi-Structured Documents for Entity-Linking**. 
 > *In Proceedings of the 23rd ACM International Conference on Conference 
-> on Information and Knowledge Management (pp. 2075-2077). DOI: [http://doi.acm.org/10.1145/2661829.2661854]*
+> on Information and Knowledge Management (pp. 2075-2077). DOI: http://doi.acm.org/10.1145/2661829.2661854*
 
 
 Bibtex format:
